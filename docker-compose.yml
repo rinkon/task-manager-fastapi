@@ -1,0 +1,18 @@
+services:
+  database:
+    image: postgres
+    ports:
+      - 5432:5432
+    restart: always
+    env_file:
+      - .env
+
+  task-manager-api:
+    image: task-manager-api
+    restart: always
+    depends_on:
+      - database
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
