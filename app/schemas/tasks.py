@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 class TaskCreate(BaseModel):
     name: str
@@ -25,3 +25,7 @@ class TaskUpdate(BaseModel):
 
     class Config:
         extra = "forbid"
+
+class PaginatedTaskRead(BaseModel):
+    tasks: List[TaskRead]
+    has_next: bool

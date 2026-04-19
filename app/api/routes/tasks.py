@@ -2,17 +2,18 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.api import deps
 from app.db import database
 from sqlalchemy.orm import Session
-from app.schemas.tasks import TaskCreate, TaskRead, TaskUpdate
+from app.schemas.tasks import TaskCreate, TaskRead, TaskUpdate, PaginatedTaskRead
 from app.models.task import Task
 from app.services import task_service
 from typing import List
 
 router = APIRouter()
 
-@router.get('/tasks', response_model=List[TaskRead])
-def get_user_tasks(current_user: dict = Depends(deps.get_current_user), db: Session = Depends(database.get_db)):
+
+@router.get('/tasks', response_model=PaginatedTaskRead)
+def get_user_tasks(limit: int = 10, skip: int = 0, current_user: dict = Depends(deps.get_current_user), db: Session = Depends(database.get_db)):
     user_id = current_user.get('user_id')
-    return task_service.get_user_tasks(user_id=user_id, db=db)
+    return task_service.get_user_tasks(user_id=user_id, db=db, limit=limit, skip=skip)
 
 
 @router.post('/tasks')

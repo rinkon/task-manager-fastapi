@@ -16,9 +16,14 @@ def create_task(task: TaskCreate, user_id: int, db: Session):
     return {"message": "Task creation successful"}
 
 
-def get_user_tasks(user_id: int, db: Session):
-    db_tasks = db.query(Task).filter(Task.owner_id == user_id).all()
-    return db_tasks
+def get_user_tasks(user_id: int, db: Session, limit: int, skip: int):
+    query = db.query(Task).filter(Task.owner_id == user_id)
+    db_tasks = query.offset(skip).limit(limit+1).all()
+    has_next = len(db_tasks) > limit
+    return {
+        "tasks": db_tasks[:limit],
+        "has_next": has_next
+    }
 
 
 def get_task_by_id(task_id: int, user_id: int, db: Session):
