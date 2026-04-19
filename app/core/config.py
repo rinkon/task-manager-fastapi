@@ -3,6 +3,7 @@ import os
 SECRET_KEY = os.environ['FAST_API_SECRET_KEY']
 DB_USER = os.environ['POSTGRES_USER']
 DB_PASSWORD = os.environ['POSTGRES_PASSWORD']
+DB_HOST = os.environ['DB_HOST']
 DB_NAME = os.environ['POSTGRES_DB']
 ALGORITHM = "HS256"
 TOKEN_LIFETIME_IN_MINUTES = 360

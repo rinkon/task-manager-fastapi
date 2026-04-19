@@ -19,7 +19,7 @@ def get_user_tasks(current_user: dict = Depends(deps.get_current_user), db: Sess
 def create_task(task: TaskCreate, current_user: dict = Depends(deps.get_current_user), db: Session = Depends(database.get_db)):
     user_id = current_user.get('user_id')
     return task_service.create_task(task=task, user_id=user_id, db=db)
-    
+
 
 @router.get('/tasks/{task_id}', response_model=TaskRead)
 def get_task_by_id(task_id: int, current_user: dict = Depends(deps.get_current_user), db: Session = Depends(database.get_db)):
@@ -31,6 +31,13 @@ def get_task_by_id(task_id: int, current_user: dict = Depends(deps.get_current_u
 def update_task_by_id(task: TaskUpdate, task_id: int, current_user: dict = Depends(deps.get_current_user), db: Session = Depends(database.get_db)):
     user_id = current_user.get('user_id')
     return task_service.update_task_by_id(task=task, task_id=task_id, user_id=user_id, db=db)
+
+
+@router.delete('/tasks/{task_id}')
+def delete_task_by_id(task_id: int, current_user: dict = Depends(deps.get_current_user), db: Session = Depends(database.get_db)):
+    user_id = current_user.get('user_id')
+    return task_service.delete_task_by_id(task_id=task_id, user_id=user_id,db=db)
+
     
     
 

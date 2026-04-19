@@ -53,3 +53,14 @@ def update_task_by_id(task: TaskUpdate, task_id: int, user_id: int, db: Session)
     db.refresh(db_task)
 
     return {"message": "Task update successful"}
+
+
+def delete_task_by_id(task_id: int, user_id: int, db: Session):
+    db_task = db.query(Task).filter(Task.id == task_id).first()
+    if not db_task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    if db_task.owner_id != user_id:
+        raise HTTPException(status_code=403, detail="Forbidden access")
+    db.delete(db_task)
+    db.commit()
+    return {"message": "Task deletion successful"}
