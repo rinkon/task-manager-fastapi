@@ -11,3 +11,4 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(auth.router, prefix='/auth')
 app.include_router(tasks.router, prefix='/tasks')
+

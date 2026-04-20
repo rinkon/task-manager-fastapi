@@ -10,8 +10,11 @@ from app.services import auth_service
 
 router = APIRouter()
 
+@router.get('/')
+def say_hello():
+    return {"message": "Project initiated"}
 
-@router.post('/register')
+@router.post('/register', status_code=201)
 def register(new_user: UserCreate, db: Session = Depends(get_db)):
     return auth_service.register(new_user, db)
 

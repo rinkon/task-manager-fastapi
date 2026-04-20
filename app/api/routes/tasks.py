@@ -10,7 +10,12 @@ from typing import List
 router = APIRouter()
 
 
-@router.get('/tasks', response_model=PaginatedTaskRead)
+@router.get('/')
+def say_hello():
+    return {"message": "Project initiated"}
+
+
+@router.get('/', response_model=PaginatedTaskRead)
 def get_user_tasks(limit: int = 10, skip: int = 0, current_user: dict = Depends(deps.get_current_user), db: Session = Depends(database.get_db)):
     user_id = current_user.get('user_id')
     return task_service.get_user_tasks(user_id=user_id, db=db, limit=limit, skip=skip)
