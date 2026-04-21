@@ -8,7 +8,7 @@ from httpx import AsyncClient
 from httpx import ASGITransport
 from app.core import config
 import pytest_asyncio
-
+import uuid
 
 
 TEST_DB_URL = f"postgresql://{config.DB_USER}:{config.DB_PASSWORD}@{config.DB_HOST}:5432/test_db"
@@ -49,3 +49,70 @@ async def client(db):
 
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
+
+
+@pytest_asyncio.fixture
+async def registered_user(client):
+    user = {
+        "name": "Ashik Aowal",
+        "email": f"{uuid.uuid4()}@test.com",
+        "role": "user",
+        "password": "simplepassword"
+    }
+
+    response = await client.post("/auth/register", json=user)
+    return user
+
+
+@pytest_asyncio.fixture
+async def auth_headers(client, registered_user):
+    credentials = {
+        "email": registered_user["email"],
+        "password": registered_user["password"]
+    }
+    response = await client.post("/auth/login", json=credentials)
+    headers = {
+        "Authorization": f"Bearer {response.json()['access_token']}"
+    }
+    return headers
+
+
+@pytest_asyncio.fixture
+async def auth_headers_2(client):
+    user = {
+        "name": "User2",
+        "email": f"{uuid.uuid4()}@test.com",
+        "role": "user",
+        "password": "password"
+    }
+
+    await client.post("/auth/register", json=user)
+
+    response = await client.post("/auth/login", json={
+        "email": user["email"],
+        "password": user["password"]
+    })
+
+    headers = {
+        "Authorization": f"Bearer {response.json()['access_token']}"
+    }
+    return headers
+
+
+@pytest_asyncio.fixture
+async def create_task(client, auth_headers):
+    task = {
+        "name": "Exercise",
+        "description": "Do some stretching for 30 minutes or so",
+        "is_completed": False,
+        "due_date": "2026-04-26T09:03:18.633Z"
+    }
+
+    response = await client.post("/tasks/", headers=auth_headers, json=task)
+    return response.json()
+
+
+
+
+
+

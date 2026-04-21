@@ -5,15 +5,15 @@ from app.schemas.tasks import TaskCreate, TaskUpdate
 
 
 def create_task(task: TaskCreate, user_id: int, db: Session):
-    
     db_task = Task(
         **task.model_dump(),
         owner_id=user_id
     )
     db.add(db_task)
     db.commit()
+    db.refresh(db_task)
 
-    return {"message": "Task creation successful"}
+    return {"message": "Task creation successful", "task": db_task}
 
 
 def get_user_tasks(user_id: int, db: Session, limit: int, skip: int):

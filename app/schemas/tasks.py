@@ -9,6 +9,7 @@ class TaskCreate(BaseModel):
     due_date: datetime
 
 class TaskRead(BaseModel):
+    id: int
     name: str
     description: str
     is_completed: bool
