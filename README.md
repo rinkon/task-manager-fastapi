@@ -13,6 +13,7 @@ A production-style backend API built with **FastAPI**, featuring **JWT authentic
 * 🧱 Modular architecture (routes, core, models, services, db, schemas)
 * ⚡ FastAPI auto docs (`/docs`)
 * 🐳 Docker support
+* 🧪 Unit tests 
 
 ---
 
@@ -25,6 +26,7 @@ A production-style backend API built with **FastAPI**, featuring **JWT authentic
 * argon2 (password hashing)
 * uvicorn
 * Docker
+* Pytest
 
 ---
 
@@ -53,6 +55,10 @@ app
  ┣ services
  ┃ ┣ auth_service.py
  ┃ ┗ task_service.py
+ ┣ tests
+ ┃ ┣ conftest.py
+ ┃ ┗ test_auth.py
+ ┃ ┗ test_tasks.py
  ┣ utils
  ┗ main.py
 ```
